@@ -31,6 +31,7 @@ fn main() {
 fn get_day(day: &str) -> fn(&str) -> SolutionData {
     return match day {
         "1" => day1::solve,
+        "2" => day2::solve,
         _ => unimplemented!()
     }
 }
