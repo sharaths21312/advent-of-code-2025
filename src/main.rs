@@ -6,6 +6,8 @@ use std::{env::args, fs, path::{self, Path, absolute}};
 use utils::solution::Solution;
 use days::*;
 
+use crate::utils::solution::SolutionData;
+
 fn main() {
     let args: Vec<String> = args().collect();
     let filename: String;
@@ -21,10 +23,12 @@ fn main() {
     }
     let input = fs::read_to_string(paths).unwrap();
     let solution = get_day(&day)(&input);
-    let _ = println!("{}\n{}", solution.0, solution.1);
+    let _ = println!("{}\n\n{}\n\nTime elapsed = {}ms, {}ms",
+        solution.part1, solution.part2,
+        solution.time1.as_millis(), solution.time2.as_millis());
 }
 
-fn get_day(day: &str) -> fn(&str) -> (Solution, Solution) {
+fn get_day(day: &str) -> fn(&str) -> SolutionData {
     return match day {
         "1" => day1::solve,
         _ => unimplemented!()

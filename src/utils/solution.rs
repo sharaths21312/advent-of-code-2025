@@ -1,10 +1,17 @@
-use std::fmt::{Display, Formatter, Result};
+use std::{fmt::{Display, Formatter, Result}, time::Duration};
 use Solution::*;
 
 pub enum Solution {
     I32(i32),
     I64(i64),
     Str(String)
+}
+
+pub struct SolutionData {
+    pub part1: Solution,
+    pub part2: Solution,
+    pub time1: Duration,
+    pub time2: Duration
 }
 
 impl Display for Solution {
