@@ -36,13 +36,11 @@ impl From<&Point> for Point {
     fn from(p: &Point) -> Self { *p }
 }
 
-impl From<(i64, i64)> for Point {
-    fn from(p: (i64, i64)) -> Point {
-        Point { x: p.0, y: p.1 }
+impl<T: Into<i64>> From<(T, T)> for Point {
+    fn from(p: (T, T)) -> Point {
+        Point { x: p.0.into(), y: p.1.into() }
     }
 }
-
-
 
 impl_op_ex!(+ |a: &Point, b: &Point| -> Point { Point::new(a.x + b.x, a.y + b.y) });
 impl_op!(+= |a: &mut Point, b: &Point| { *a = *a + b; });

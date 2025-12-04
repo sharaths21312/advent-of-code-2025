@@ -41,6 +41,7 @@ fn get_day(day: &str) -> fn(&str) -> FullSolution {
         "1" => day1::solve,
         "2" => day2::solve,
         "3" => day3::solve,
+        "4" => day4::solve,
         _ => unimplemented!()
     }
 }

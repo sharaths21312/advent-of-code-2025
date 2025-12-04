@@ -1,7 +1,7 @@
 use std::default;
 use std::fmt::Display;
 use std::iter::Enumerate;
-use std::ops::Index;
+use std::ops::{Index, IndexMut};
 use std::os::windows;
 
 use crate::utils::point::Point;
@@ -13,6 +13,12 @@ pub struct Grid<T> {
     width: usize,
     height: usize,
     data: Vec<T>
+}
+
+#[derive(Debug)]
+pub struct GridEnumerator<'a, T> {
+    iter: Enumerate<std::slice::Iter<'a, T>>,
+    grid: &'a Grid<T>
 }
 
 impl<T, U: TryInto<usize>> Index<(U, U)> for Grid<T> {
@@ -85,11 +91,14 @@ impl<'a, T> Grid<T> {
         }
     }
 
+    pub fn enumerate(&self) -> GridEnumerator<'_, T> {
+        GridEnumerator { iter: self.data.iter().enumerate(), grid: &self }
+    }
+
     pub fn gen_from_str(input: &str, f: fn(char) -> T) -> Grid<T> {
         let width = input.lines().next().unwrap().len();
-        let height = input.len()/width;
-        let data = input.chars().filter(|c| c.is_whitespace()).map(f).collect();
-        Grid { width, height, data }
+        let data: Vec<_> = input.chars().filter(|c| !c.is_whitespace()).map(f).collect();
+        Grid { width, height: data.len()/width, data }
     }
 }
 
@@ -118,5 +127,27 @@ impl<T: Display> Display for Grid<T> {
 impl From<&str> for Grid<char> {
     fn from(value: &str) -> Self {
         Self::gen_from_str(value, |c| c)
+    }
+}
+
+impl<T, U: TryInto<usize>> IndexMut<(U, U)> for Grid<T> {
+    fn index_mut(&mut self, index: (U, U)) -> &mut Self::Output {
+        let x = match index.0.try_into() { Ok(x) => x, Err(_) => panic!("Invalid index")};
+        let y = match index.1.try_into() { Ok(x) => x, Err(_) => panic!("Invalid index")};
+        &mut self.data[y * self.width + x]
+    }
+}
+
+impl<T> IndexMut<&Point> for Grid<T> {
+    fn index_mut(&mut self, index: &Point) -> &mut Self::Output {
+        &mut self[(index.x, index.y)]
+    }
+}
+
+impl<'a, T> Iterator for GridEnumerator<'a, T> {
+    type Item = (Point, &'a T);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.iter.next().map(|(i, x)| (self.grid.coords(i), x))
     }
 }
