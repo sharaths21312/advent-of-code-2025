@@ -2,11 +2,11 @@
 pub mod utils;
 pub mod days;
 
-use std::{env::args, fs, path::{self, Path, absolute}};
+use std::{env::args, fmt::format, fs, path::{self, Path, absolute}, time::Duration};
 use utils::solution::Solution;
 use days::*;
 
-use crate::utils::solution::SolutionData;
+use crate::utils::solution::FullSolution;
 
 fn main() {
     let args: Vec<String> = args().collect();
@@ -23,15 +23,24 @@ fn main() {
     }
     let input = fs::read_to_string(paths).unwrap();
     let solution = get_day(&day)(&input);
-    let _ = println!("{}\n\n{}\n\nTime elapsed = {}ms, {}ms",
+    let _ = println!("{}\n\n{}\n\nTime elapsed = {}, {}",
         solution.part1, solution.part2,
-        solution.time1.as_millis(), solution.time2.as_millis());
+        time_fmt(&solution.time1), time_fmt(&solution.time2));
 }
 
-fn get_day(day: &str) -> fn(&str) -> SolutionData {
+fn time_fmt(time: &Duration) -> String {
+    if time.as_millis() < 10 {
+        format!("{}μs", time.as_micros())
+    } else {
+        format!("{}ms", time.as_millis())
+    }
+}
+
+fn get_day(day: &str) -> fn(&str) -> FullSolution {
     return match day {
         "1" => day1::solve,
         "2" => day2::solve,
+        "3" => day3::solve,
         _ => unimplemented!()
     }
 }

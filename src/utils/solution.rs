@@ -7,7 +7,7 @@ pub enum Solution {
     Str(String)
 }
 
-pub struct SolutionData {
+pub struct FullSolution {
     pub part1: Solution,
     pub part2: Solution,
     pub time1: Duration,

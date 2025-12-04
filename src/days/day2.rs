@@ -1,5 +1,5 @@
 use std::{fmt::{Display, format}, ops::{Range, RangeInclusive}, time::Instant};
-use crate::utils::{solution::{Solution, SolutionData}, stringfuncs::StrExt};
+use crate::utils::{solution::{Solution, FullSolution}, stringfuncs::StrExt};
 
 type Input = Vec<(i64, i64)>;
 
@@ -57,7 +57,7 @@ fn part2(input: &Input) -> Solution {
     Solution::I64(output)
 }
 
-pub fn solve(input: &str) -> SolutionData {
+pub fn solve(input: &str) -> FullSolution {
     let start = Instant::now();
     let input = parse_input(input);
     let part1_s = part1(&input);
@@ -65,5 +65,5 @@ pub fn solve(input: &str) -> SolutionData {
     let start = Instant::now();
     let part2_s = part2(&input);
     let time2 = start.elapsed();
-    SolutionData { part1: part1_s, part2: part2_s, time1, time2 }
+    FullSolution { part1: part1_s, part2: part2_s, time1, time2 }
 }
