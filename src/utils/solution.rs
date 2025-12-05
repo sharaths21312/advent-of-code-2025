@@ -4,6 +4,7 @@ use Solution::*;
 pub enum Solution {
     I32(i32),
     I64(i64),
+    Usize(usize),
     Str(String)
 }
 
@@ -19,7 +20,8 @@ impl Display for Solution {
         match self {
             I32(x) => x.fmt(f),
             I64(x) => x.fmt(f),
-            Str(x) => x.fmt(f)
+            Str(x) => x.fmt(f),
+            Usize(x) => x.fmt(f)
         }
     }
 }
@@ -34,6 +36,7 @@ macro_rules! impl_from {
     }
 }
 
+impl_from!(usize, Usize);
 impl_from!(i32, I32);
 impl_from!(i64, I64);
 impl_from!(String, Str);

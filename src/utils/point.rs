@@ -52,3 +52,39 @@ impl_op_ex!(* |a: &Point, b: i64| -> Point { Point::new(a.x * b, a.y * b) });
 impl_op!(*= |a: &mut Point, b: i64| { *a = *a * b});
 
 impl_op_ex!(- |a: &Point| -> Point { Point::new(-a.x, -a.y)});
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Pair {
+    pub low: i64,
+    pub high: i64
+}
+
+impl Pair {
+    pub fn new(low: i64, high: i64) -> Pair {
+        Pair { low, high }
+    }
+
+    pub fn create_or_empty(low: i64, high: i64) -> Option<Pair> {
+        if high < low {
+            None
+        } else {
+            Some(Pair { low, high })
+        }
+    }
+}
+
+impl From<(i64, i64)> for Pair {
+    fn from(value: (i64, i64)) -> Self {
+        if value.0 > value.1 {
+            Pair { low: value.1, high: value.0 }
+        } else {
+            Pair { low: value.0, high: value.1 }
+        }
+    }
+}
+
+impl From<Pair> for (i64, i64) {
+    fn from(value: Pair) -> Self {
+        (value.low, value.high)
+    }
+}
